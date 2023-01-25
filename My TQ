@@ -1,0 +1,97 @@
+package com.javarush.task.pro.task04.task0401;
+
+public class Main {
+    public static String calc(String input) throws Exception {
+        String[] romanNumbers = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        int[] arabicNumbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        //Удаление лишних пробелов в строке
+        input = input.trim();
+        input = input.replace(" ", "");
+        //Создаем массив String на основе операторов +-/*
+        String[] nums = input.split("[+-/*]");
+
+
+        String result = null;
+        int a1;
+        int b1;
+        int a;
+        int b;
+
+        char num = nums[0].charAt(0);
+        if (Character.isDigit(num)) {
+            a = Integer.parseInt(nums[0]);
+            b = Integer.parseInt(nums[1]);
+            int res = calculate(a, b, input);
+            result = Integer.toString(res);
+        } else {
+            for (String string : romanNumbers)
+                if ((nums[0].equals(string) || (nums[1].equals(string)))) {
+                    a1 = romanToNumbers(nums[0]);
+                    b1 = romanToNumbers(nums[1]);
+
+                    int res = calculate(a1, b1, input);
+                    if (a1 > b1 && input.contains("-")) {
+                        throw new Exception();
+                    }
+                    result = convertNumToRoman(res);
+                } else {
+                    throw new Exception("Ввод должен иметь только римские/арабские числа");
+                }
+        }
+
+        return result;
+    }
+
+
+    private static int romanToNumbers(String roman) {
+        switch (roman) {
+            case "I":
+                return 1;
+            case "II":
+                return 2;
+            case "III":
+                return 3;
+            case "IV":
+                return 4;
+            case "V":
+                return 5;
+            case "VI":
+                return 6;
+            case "VII":
+                return 7;
+            case "VIII":
+                return 8;
+            case "IX":
+                return 9;
+            case "X":
+                return 10;
+        }
+        return 0;
+    }
+
+    private static String convertNumToRoman(int numArabian) {
+        String[] roman = {"O", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX",
+                "XXI", "XXII", "XXIII", "XXIV", "XXV", "XXVI", "XXVII", "XXVIII", "XXIX", "XXX", "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV", "XXXVI", "XXXVII", "XXXVIII", "XXXIX", "XL",
+                "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI", "XLVII", "XLVIII", "XLIX", "L", "LI", "LII", "LIII", "LIV", "LV", "LVI", "LVII", "LVIII", "LIX", "LX",
+                "LXI", "LXII", "LXIII", "LXIV", "LXV", "LXVI", "LXVII", "LXVIII", "LXIX", "LXX",
+                "LXXI", "LXXII", "LXXIII", "LXXIV", "LXXV", "LXXVI", "LXXVII", "LXXVIII", "LXXIX", "LXXX",
+                "LXXXI", "LXXXII", "LXXXIII", "LXXXIV", "LXXXV", "LXXXVI", "LXXXVII", "LXXXVIII", "LXXXIX", "XC",
+                "XCI", "XCII", "XCIII", "XCIV", "XCV", "XCVI", "XCVII", "XCVIII", "XCIX", "C"
+        };
+        return roman[numArabian];
+    }
+
+    public static int calculate(int a, int b, String input) {
+        int result = 0;
+        if (input.contains("+")) result = a + b;
+        else if (input.contains("-")) result = a - b;
+        else if (input.contains("/")) result = a / b;
+        else if (input.contains("*")) result = a * b;
+        return result;
+    }
+
+    public static void main(String[] args) throws Exception {
+        System.out.println(calc("2 + 2"));
+    }
+
+}
